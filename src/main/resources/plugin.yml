@@ -1,5 +1,6 @@
 name: SpAChat
-main: net.specialattack.chat.ChatMain
+main: net.specialattack.chat.SpAChat
 version: 1.0
 commands:
+depend: [SpACoreBukkit]
 softdepend: [Vault]

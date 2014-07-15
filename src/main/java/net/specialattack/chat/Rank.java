@@ -1,6 +1,8 @@
 
 package net.specialattack.chat;
 
+import org.bukkit.configuration.ConfigurationSection;
+
 public class Rank {
 
     public String name;
@@ -8,13 +10,11 @@ public class Rank {
     public String suffix;
     public int importance;
 
-    public Rank(String name) {
-        this.name = name;
-    }
-
-    public void init(String prefix, int importance) {
-        this.prefix = prefix;
-        this.importance = importance;
+    public Rank(ConfigurationSection section) {
+        this.name = section.getName();
+        this.prefix = section.getString("prefix", "");
+        this.suffix = section.getString("suffix", "");
+        this.importance = section.getInt("importance", 1);
     }
 
     public String getPermissionNode() {
@@ -22,7 +22,7 @@ public class Rank {
     }
 
     public String getFormattedName(String name) {
-        return this.prefix + name;
+        return this.prefix + name + this.suffix;
     }
 
 }

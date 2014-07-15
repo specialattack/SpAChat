@@ -1,0 +1,5 @@
+name: SpAChat
+main: net.specialattack.chat.ChatMain
+version: 1.0
+commands:
+softdepend: [Vault]

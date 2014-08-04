@@ -4,3 +4,7 @@ version: 1.0
 commands:
 depend: [SpACoreBukkit]
 softdepend: [Vault]
+permissions:
+  spachat.color:
+    default: op
+    description: Allows the use of colors in chat

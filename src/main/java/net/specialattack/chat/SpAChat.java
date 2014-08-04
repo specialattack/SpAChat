@@ -14,11 +14,14 @@ import java.util.logging.Logger;
 
 import net.specialattack.bukkit.core.PluginState;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -61,6 +64,13 @@ public class SpAChat extends JavaPlugin {
     public void onDisable() {
         state = PluginState.Disabling;
 
+        if (this.ranks != null) {
+            for (Rank rank : this.ranks) {
+
+                Bukkit.getPluginManager().removePermission("spachat." + rank.name);
+            }
+        }
+
         log(this.pdf.getFullName() + " is now disabled!");
 
         state = PluginState.Disabled;
@@ -79,6 +89,7 @@ public class SpAChat extends JavaPlugin {
                     Rank rank = new Rank((ConfigurationSection) obj);
 
                     this.ranks.add(rank);
+                    Bukkit.getPluginManager().addPermission(new Permission("spachat." + rank.name, PermissionDefault.FALSE));
                 }
             }
         }
@@ -113,11 +124,14 @@ public class SpAChat extends JavaPlugin {
         String name = this.getFormattedName(player).replace("&name", "%1$s");
         String health = this.getHealthBar((int) player.getHealth(), (int) player.getMaxHealth());
         String world = this.getWorld(player);
-        String message = event.getMessage();
+        if (player.hasPermission("spachat.color")) {
+            String message = event.getMessage();
+            message = Util.colorize(message);
+            event.setMessage(message);
+        }
 
         String format = String.format(this.formatString, name, "%2$s", world, health);
         event.setFormat(format);
-        event.setMessage(message);
     }
 
     public String getFormattedName(Player player) {

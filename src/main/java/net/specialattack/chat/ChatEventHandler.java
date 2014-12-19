@@ -1,4 +1,3 @@
-
 package net.specialattack.chat;
 
 import org.bukkit.event.EventHandler;

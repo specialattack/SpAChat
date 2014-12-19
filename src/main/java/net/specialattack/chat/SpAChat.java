@@ -1,19 +1,10 @@
-
 package net.specialattack.chat;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
-import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import net.specialattack.bukkit.core.PluginState;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
@@ -140,11 +131,9 @@ public class SpAChat extends JavaPlugin {
             public int compare(Rank rank1, Rank rank2) {
                 if (rank1.importance < rank2.importance) {
                     return 1;
-                }
-                else if (rank1.importance > rank2.importance) {
+                } else if (rank1.importance > rank2.importance) {
                     return -1;
-                }
-                else {
+                } else {
                     return rank1.name.compareTo(rank2.name);
                 }
             }
@@ -178,8 +167,7 @@ public class SpAChat extends JavaPlugin {
         for (int i = 0; i < maxHealth; i += 2) {
             if (health > i) {
                 sb.append(ChatColor.DARK_GREEN + "|");
-            }
-            else {
+            } else {
                 sb.append(ChatColor.DARK_RED + "|");
             }
         }

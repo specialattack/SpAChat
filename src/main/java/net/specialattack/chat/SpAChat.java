@@ -87,8 +87,8 @@ public class SpAChat extends JavaPlugin {
 
         this.format = config.getString("format", format);
         this.formatString = Util.colorize(this.format);
-        this.formatString = this.formatString.replaceAll("&name", "\\%1\\$s").replaceAll("&msg", "\\%2\\$s");
-        this.formatString = this.formatString.replaceAll("&world", "\\%3\\$s").replaceAll("&health", "\\%4\\$s");
+        this.formatString = this.formatString.replaceAll("@name", "\\%1\\$s").replaceAll("@msg", "\\%2\\$s");
+        this.formatString = this.formatString.replaceAll("@world", "\\%3\\$s").replaceAll("@health", "\\%4\\$s");
 
         this.worlds = new HashMap<String, String>();
         ConfigurationSection worlds = config.getConfigurationSection("worlds");
@@ -112,7 +112,7 @@ public class SpAChat extends JavaPlugin {
 
     public void formatMessage(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
-        String name = this.getFormattedName(player).replace("&name", "%1$s");
+        String name = this.getFormattedName(player).replace("@name", "%1$s");
         String health = this.getHealthBar((int) player.getHealth(), (int) player.getMaxHealth());
         String world = this.getWorld(player);
         if (player.hasPermission("spachat.color")) {
@@ -144,7 +144,7 @@ public class SpAChat extends JavaPlugin {
             }
         }
 
-        String name = "&name";
+        String name = "@name";
 
         for (Rank r : ranks) {
             name = r.getFormattedName(name);
@@ -166,9 +166,9 @@ public class SpAChat extends JavaPlugin {
         StringBuilder sb = new StringBuilder(ChatColor.RESET.toString());
         for (int i = 0; i < maxHealth; i += 2) {
             if (health > i) {
-                sb.append(ChatColor.DARK_GREEN + "|");
+                sb.append(ChatColor.DARK_GREEN).append("|");
             } else {
-                sb.append(ChatColor.DARK_RED + "|");
+                sb.append(ChatColor.DARK_RED).append("|");
             }
         }
         return sb.append(ChatColor.RESET).toString();

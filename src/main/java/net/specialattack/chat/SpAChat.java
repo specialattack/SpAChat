@@ -10,9 +10,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -23,10 +23,13 @@ public class SpAChat extends JavaPlugin {
     private PluginDescriptionFile pdf;
     private Logger logger;
 
-    public String format = "<&name> &msg";
-    public String formatString;
-    public List<Rank> ranks;
+    protected Plugin craftIRC;
+
+    public Format format;
+    public Set<Tag> tags;
     public Map<String, String> worlds;
+
+    public static boolean craftIRCFix;
 
     public SpAChat() {
         super();
@@ -44,6 +47,12 @@ public class SpAChat extends JavaPlugin {
         this.logger = this.getLogger();
         this.pdf = this.getDescription();
 
+        this.craftIRC = Bukkit.getPluginManager().getPlugin("CraftIRC");
+
+        this.saveDefaultConfig();
+
+        Format.loadDefaultProviders();
+
         this.loadFormatting();
 
         this.getServer().getPluginManager().registerEvents(new ChatEventHandler(), this);
@@ -55,10 +64,9 @@ public class SpAChat extends JavaPlugin {
     public void onDisable() {
         state = PluginState.Disabling;
 
-        if (this.ranks != null) {
-            for (Rank rank : this.ranks) {
-
-                Bukkit.getPluginManager().removePermission("spachat." + rank.name);
+        if (this.tags != null) {
+            for (Tag tag : this.tags) {
+                Bukkit.getPluginManager().removePermission("spachat." + tag.name);
             }
         }
 
@@ -70,25 +78,46 @@ public class SpAChat extends JavaPlugin {
     private void loadFormatting() {
         FileConfiguration config = this.getConfig();
 
-        this.ranks = new ArrayList<Rank>();
+        SpAChat.craftIRCFix = config.getBoolean("craftIRC-fix", true);
+
+        try {
+            this.format = Format.loadFormat(MapListSection.convert(config.getMapList("format")));
+            SpAChat.log(Level.INFO, "Chat format is:" + this.format.getDebugHierarchy());
+        } catch (Exception e) {
+            SpAChat.log(Level.SEVERE, "Failed loading chat formatting", e);
+        }
+
+        this.tags = new TreeSet<Tag>(new Comparator<Tag>() {
+            @Override
+            public int compare(Tag o1, Tag o2) {
+                if (o1.sortingOrder < o2.sortingOrder) {
+                    return -1;
+                } else if (o1.sortingOrder > o2.sortingOrder) {
+                    return 1;
+                } else {
+                    if (o1.priority < o2.priority) {
+                        return -1;
+                    } else if (o1.priority > o2.priority) {
+                        return 1;
+                    } else {
+                        return o1.name.compareTo(o2.name);
+                    }
+                }
+            }
+        });
         ConfigurationSection ranks = config.getConfigurationSection("ranks");
         if (ranks != null) {
             Map<String, Object> ranksMap = ranks.getValues(false);
 
             for (Object obj : ranksMap.values()) {
                 if (obj instanceof ConfigurationSection) {
-                    Rank rank = new Rank((ConfigurationSection) obj);
+                    Tag tag = Tag.loadTag((ConfigurationSection) obj);
 
-                    this.ranks.add(rank);
-                    Bukkit.getPluginManager().addPermission(new Permission("spachat." + rank.name, PermissionDefault.FALSE));
+                    this.tags.add(tag);
+                    Bukkit.getPluginManager().addPermission(new Permission("spachat." + tag.name, PermissionDefault.FALSE));
                 }
             }
         }
-
-        this.format = config.getString("format", format);
-        this.formatString = Util.colorize(this.format);
-        this.formatString = this.formatString.replaceAll("@name", "\\%1\\$s").replaceAll("@msg", "\\%2\\$s");
-        this.formatString = this.formatString.replaceAll("@world", "\\%3\\$s").replaceAll("@health", "\\%4\\$s");
 
         this.worlds = new HashMap<String, String>();
         ConfigurationSection worlds = config.getConfigurationSection("worlds");
@@ -108,50 +137,6 @@ public class SpAChat extends JavaPlugin {
 
     public static PluginState getState() {
         return state;
-    }
-
-    public void formatMessage(AsyncPlayerChatEvent event) {
-        Player player = event.getPlayer();
-        String name = this.getFormattedName(player).replace("@name", "%1$s");
-        String health = this.getHealthBar((int) player.getHealth(), (int) player.getMaxHealth());
-        String world = this.getWorld(player);
-        if (player.hasPermission("spachat.color")) {
-            String message = event.getMessage();
-            message = Util.colorize(message);
-            event.setMessage(message);
-        }
-
-        String format = String.format(this.formatString, name, "%2$s", world, health);
-        event.setFormat(format);
-    }
-
-    public String getFormattedName(Player player) {
-        Set<Rank> ranks = new TreeSet<Rank>(new Comparator<Rank>() {
-            @Override
-            public int compare(Rank rank1, Rank rank2) {
-                if (rank1.importance < rank2.importance) {
-                    return 1;
-                } else if (rank1.importance > rank2.importance) {
-                    return -1;
-                } else {
-                    return rank1.name.compareTo(rank2.name);
-                }
-            }
-        });
-        for (Rank r : this.ranks) {
-            if (player.hasPermission(r.getPermissionNode())) {
-                ranks.add(r);
-            }
-        }
-
-        String name = "@name";
-
-        for (Rank r : ranks) {
-            name = r.getFormattedName(name);
-        }
-
-        name = Util.colorize(name);
-        return ChatColor.RESET + name + ChatColor.RESET;
     }
 
     private String getWorld(Player player) {

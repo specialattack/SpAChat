@@ -1,0 +1,46 @@
+format:
+- type: spachat:tags
+- type: spachat:withClick
+  format:
+  - type: minecraft:name
+  click:
+    action: SUGGEST_COMMAND
+    format: 
+    - type: spachat:string
+      value: '/tell '
+    - type: minecraft:name
+- type: spachat:string
+  value: ' '
+- type: minecraft:message
+tags:
+  default:
+    name-color: GRAY
+    tag-color: GRAY
+    tag: ''
+    priority: 0
+    sorting-order: 0
+  admin:
+    name-color: WHITE
+    tag-color: DARK_RED
+    tag: '[Admin]'
+    priority: 1
+    sorting-order: 1
+    tag-tooltip:
+      requires:
+      - message
+      format:
+      - type: spachat:string
+        value: 'Custom tooltip: '
+      - type: spachat:meta
+        name: message
+    tag-click:
+      requires:
+      - link
+      click: OPEN_URL
+      format:
+      - type: spachat:meta
+        name: link
+worlds:
+- world-World
+- world_nether-World
+- world_the_end-World

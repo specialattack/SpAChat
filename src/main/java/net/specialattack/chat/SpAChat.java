@@ -5,6 +5,7 @@ import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.specialattack.bukkit.core.PluginState;
+import net.specialattack.chat.command.SpAChatCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
@@ -49,11 +50,13 @@ public class SpAChat extends JavaPlugin {
 
         this.craftIRC = Bukkit.getPluginManager().getPlugin("CraftIRC");
 
+        this.getCommand("spachat").setExecutor(new SpAChatCommand());
+
         this.saveDefaultConfig();
 
         Format.loadDefaultProviders();
 
-        this.loadFormatting();
+        this.loadConfig();
 
         this.getServer().getPluginManager().registerEvents(new ChatEventHandler(), this);
 
@@ -64,21 +67,27 @@ public class SpAChat extends JavaPlugin {
     public void onDisable() {
         state = PluginState.Disabling;
 
-        if (this.tags != null) {
-            for (Tag tag : this.tags) {
-                Bukkit.getPluginManager().removePermission("spachat." + tag.name);
-            }
-        }
+        this.unloadPermissions();
 
         log(this.pdf.getFullName() + " is now disabled!");
 
         state = PluginState.Disabled;
     }
 
-    private void loadFormatting() {
+    private void unloadPermissions() {
+        if (this.tags != null) {
+            for (Tag tag : this.tags) {
+                Bukkit.getPluginManager().removePermission("spachat." + tag.name);
+            }
+        }
+    }
+
+    public void loadConfig() {
+        this.unloadPermissions();
+        this.reloadConfig();
         FileConfiguration config = this.getConfig();
 
-        SpAChat.craftIRCFix = config.getBoolean("craftIRC-fix", true);
+        SpAChat.craftIRCFix = config.getBoolean("craftIRC-fix", false);
 
         try {
             this.format = Format.loadFormat(MapListSection.convert(config.getMapList("format")));
@@ -131,8 +140,6 @@ public class SpAChat extends JavaPlugin {
                 }
             }
         }
-
-        this.saveConfig();
     }
 
     public static PluginState getState() {

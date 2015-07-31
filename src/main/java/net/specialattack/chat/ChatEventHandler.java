@@ -2,6 +2,7 @@ package net.specialattack.chat;
 
 import com.ensifera.animosity.craftirc.CraftIRC;
 import com.ensifera.animosity.craftirc.RelayedMessage;
+import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -11,11 +12,13 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class ChatEventHandler implements Listener {
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerChat(AsyncPlayerChatEvent event) {
         if (SpAChat.instance.format != null) {
-            Bukkit.spigot().broadcast(SpAChat.instance.format.performFormat(event.getPlayer(), event.getMessage()));
+            BaseComponent message = SpAChat.instance.format.performFormat(event.getPlayer(), event.getMessage());
             event.setCancelled(true);
+            Bukkit.getConsoleSender().sendMessage(message.toLegacyText());
+            Bukkit.spigot().broadcast(message);
             if (SpAChat.instance.craftIRC != null && SpAChat.craftIRCFix) {
                 this.handleCraftIRC(event.getPlayer(), event.getMessage());
             }

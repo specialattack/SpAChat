@@ -8,23 +8,29 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.specialattack.chat.provider.ValueProvider;
 import net.specialattack.chat.provider.minecraft.MessageProvider;
 import net.specialattack.chat.provider.minecraft.NameProvider;
+import net.specialattack.chat.provider.minecraft.RealNameProvider;
 import net.specialattack.chat.provider.minecraft.UUIDProvider;
-import net.specialattack.chat.provider.spachat.*;
+import net.specialattack.chat.provider.spachat.ColoredNameProvider;
+import net.specialattack.chat.provider.spachat.MetaProvider;
+import net.specialattack.chat.provider.spachat.StringProvider;
+import net.specialattack.chat.provider.spachat.TagsProvider;
+import net.specialattack.chat.provider.spachat.WithClickProvider;
+import net.specialattack.chat.provider.spachat.WithHoverProvider;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 public class Format {
 
-    private static Map<String, Class<? extends ValueProvider>> valueProviders = new HashMap<String, Class<? extends ValueProvider>>();
+    private static Map<String, Class<? extends ValueProvider>> valueProviders = new HashMap<>();
     private ValueProvider[] providers;
 
     private Format() {
     }
 
-    public BaseComponent performFormat(Player player, String message) {
+    public BaseComponent performFormat(SpAChat plugin, Player player, String message) {
         BaseComponent base = new TextComponent("");
         for (ValueProvider provider : this.providers) {
-            for (BaseComponent component : provider.getValue(player, message)) {
+            for (BaseComponent component : provider.getValue(plugin, player, message)) {
                 base.addExtra(component);
             }
         }
@@ -78,6 +84,7 @@ public class Format {
     protected static void loadDefaultProviders() {
         // Minecraft namespace
         Format.registerProvider(NameProvider.class);
+        Format.registerProvider(RealNameProvider.class);
         Format.registerProvider(MessageProvider.class);
         Format.registerProvider(UUIDProvider.class);
         // SpAChat namespace
@@ -88,5 +95,4 @@ public class Format {
         Format.registerProvider(WithClickProvider.class);
         Format.registerProvider(WithHoverProvider.class);
     }
-
 }

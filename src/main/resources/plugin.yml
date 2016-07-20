@@ -1,10 +1,50 @@
 name: SpAChat
 main: net.specialattack.chat.SpAChat
-version: 1.0
+version: 1.1
+depend: [ SpACore ]
+softdepend: [ CraftIRC ]
 commands:
-depend: [SpACoreBukkit]
-softdepend: [Vault]
+  spachat:
+    description: SpAChat command
+    usage: /<command>
+  nick:
+    description: Change your nickname
+    usage: /<command> ( [nickname] | UNSET )
 permissions:
-  spachat.color:
+  spachat.*:
+    children:
+      spachat.color: true
+      spachat.customnick: true
+      spachat.command.*: true
     default: op
-    description: Allows the use of colors in chat
+    description: Gives full access to SpAChat
+  spachat.color:
+    description: Allows players to use colors in chat
+  spachat.customnick:
+    description: Allows players to have a custom nickname
+  spachat.customnick.color:
+    description: Allows players to have a custom nickname with colors
+  spachat.command.*:
+    description: Allows players to use all /spachat subcommands
+    children:
+      spachat.command.nick: true
+      spachat.command.spachat.*: true
+  spachat.command.nick:
+    description: Allows players to use the /nick command
+  spachat.command.spachat.*:
+    description: Allows players to use all /spachat subcommands
+    children:
+      spachat.command.spachat.version: true
+      spachat.command.spachat.help: true
+      spachat.command.spachat.reload: true
+      spachat.command.spachat.nick: true
+  spachat.command.spachat.version:
+    description: Allows players to use the /spachat version command
+    default: true
+  spachat.command.spachat.help:
+    description: Allows players to use the /spachat help command
+    default: true
+  spachat.command.spachat.reload:
+    description: Allows players to use the /spachat reload command
+  spachat.command.spachat.nick:
+    description: Allows players to use the /spachat nick command

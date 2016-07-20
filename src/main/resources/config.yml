@@ -1,42 +1,40 @@
 format:
 - type: spachat:tags
 - type: spachat:withClick
+  action: SUGGEST_COMMAND
+  value-format:
+  - type: spachat:string
+    value: '/tell '
+  - type: minecraft:realname
   format:
-  - type: minecraft:name
-  click:
-    action: SUGGEST_COMMAND
-    format: 
-    - type: spachat:string
-      value: '/tell '
-    - type: minecraft:name
+  - type: spachat:name
 - type: spachat:string
-  value: ' '
+  value: ': '
 - type: minecraft:message
-tags:
+ranks:
   default:
     name-color: GRAY
-    tag-color: GRAY
-    tag: ''
-    priority: 0
     sorting-order: 0
+    priority: 0
   admin:
     name-color: WHITE
-    tag-color: DARK_RED
-    tag: '[Admin]'
-    priority: 1
     sorting-order: 1
-    tag-tooltip:
-      requires:
-      - message
+    priority: 1
+    tag-format:
+    - type: spachat:withClick
       format:
-      - type: spachat:string
-        value: 'Custom tooltip: '
-      - type: spachat:meta
-        name: message
-    tag-click:
-      requires:
-      - link
-      click: OPEN_URL
+      - type: spachat:withHover
+        format:
+        - type: spachat:string
+          value: '[Admin]'
+          color: DARK_RED
+        action: SHOW_TEXT
+        value-format:
+        - type: spachat:string
+          value: 'Custom tooltip: '
+        - type: spachat:meta
+          name: message
+      action: OPEN_URL
       format:
       - type: spachat:meta
         name: link

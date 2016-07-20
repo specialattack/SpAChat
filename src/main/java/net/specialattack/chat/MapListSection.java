@@ -1,8 +1,8 @@
 package net.specialattack.chat;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationOptions;
 import org.bukkit.configuration.ConfigurationSection;
@@ -28,13 +28,9 @@ public class MapListSection extends MemorySection implements Configuration {
     }
 
     public static List<ConfigurationSection> convert(List<Map<?, ?>> input) {
-        List<ConfigurationSection> result = new ArrayList<ConfigurationSection>(input.size());
-        int i = 0;
-        for (Map<?, ?> map : input) {
-            result.add(new MapListSection(map));
-            i++;
-        }
-        return result;
+        return input.stream()
+                .map(MapListSection::new)
+                .collect(Collectors.toList());
     }
 
     @Override

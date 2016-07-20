@@ -4,6 +4,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.specialattack.chat.Format;
 import net.specialattack.chat.MapListSection;
+import net.specialattack.chat.SpAChat;
 import net.specialattack.chat.provider.BaseProvider;
 import net.specialattack.chat.provider.ValueProvider;
 import org.bukkit.configuration.ConfigurationSection;
@@ -26,9 +27,9 @@ public class WithClickProvider extends BaseProvider {
     }
 
     @Override
-    public BaseComponent[] getValue(Player player, String message) {
-        BaseComponent result = this.format.performFormat(player, message);
-        result.setClickEvent(new ClickEvent(this.action, this.valueFormat.performFormat(player, message).toPlainText()));
+    public BaseComponent[] getValue(SpAChat plugin, Player player, String message) {
+        BaseComponent result = this.format.performFormat(plugin, player, message);
+        result.setClickEvent(new ClickEvent(this.action, this.valueFormat.performFormat(plugin, player, message).toPlainText()));
         return new BaseComponent[] { this.applyStyles(result) };
     }
 
@@ -41,9 +42,6 @@ public class WithClickProvider extends BaseProvider {
             throw new IllegalArgumentException("withClick action must be either OPEN_URL, OPEN_FILE, RUN_COMMAND, or SUGGEST_COMMAND");
         }
         this.action = ClickEvent.Action.valueOf(action);
-        if (this.action == null) {
-            throw new IllegalArgumentException("withClick action must be either OPEN_URL, OPEN_FILE, RUN_COMMAND, or SUGGEST_COMMAND");
-        }
         this.valueFormat = Format.loadFormat(MapListSection.convert(section.getMapList("value-format")));
     }
 

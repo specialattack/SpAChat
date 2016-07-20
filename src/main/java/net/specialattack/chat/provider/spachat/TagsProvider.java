@@ -1,6 +1,7 @@
 package net.specialattack.chat.provider.spachat;
 
 import net.md_5.bungee.api.chat.BaseComponent;
+import net.specialattack.chat.SpAChat;
 import net.specialattack.chat.Tag;
 import net.specialattack.chat.provider.ValueProvider;
 import org.bukkit.configuration.ConfigurationSection;
@@ -19,8 +20,8 @@ public class TagsProvider implements ValueProvider {
     }
 
     @Override
-    public BaseComponent[] getValue(Player player, String message) {
-        return Tag.getTags(player, message);
+    public BaseComponent[] getValue(SpAChat plugin, Player player, String message) {
+        return Tag.getTags(plugin, player, message);
     }
 
     @Override

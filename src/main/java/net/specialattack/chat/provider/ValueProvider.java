@@ -1,6 +1,7 @@
 package net.specialattack.chat.provider;
 
 import net.md_5.bungee.api.chat.BaseComponent;
+import net.specialattack.chat.SpAChat;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
@@ -10,7 +11,7 @@ public interface ValueProvider {
 
     String getName();
 
-    BaseComponent[] getValue(Player player, String message);
+    BaseComponent[] getValue(SpAChat plugin, Player player, String message);
 
     void parseFromConfig(ConfigurationSection section);
 

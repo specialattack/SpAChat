@@ -14,6 +14,9 @@ public abstract class BaseProvider implements ValueProvider {
         if (section.contains("bold")) {
             this.bold = section.getBoolean("bold");
         }
+        if (section.contains("italic")) {
+            this.italic = section.getBoolean("italic");
+        }
         if (section.contains("underlined")) {
             this.underlined = section.getBoolean("underlined");
         }
@@ -31,6 +34,9 @@ public abstract class BaseProvider implements ValueProvider {
     public BaseComponent applyStyles(BaseComponent component) {
         if (this.bold != null) {
             component.setBold(this.bold);
+        }
+        if (this.italic != null) {
+            component.setItalic(this.italic);
         }
         if (this.underlined != null) {
             component.setUnderlined(this.underlined);

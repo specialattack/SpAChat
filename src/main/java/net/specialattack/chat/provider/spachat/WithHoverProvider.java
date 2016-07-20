@@ -6,6 +6,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.specialattack.chat.Format;
 import net.specialattack.chat.MapListSection;
+import net.specialattack.chat.SpAChat;
 import net.specialattack.chat.provider.BaseProvider;
 import net.specialattack.chat.provider.ValueProvider;
 import org.bukkit.configuration.ConfigurationSection;
@@ -28,11 +29,11 @@ public class WithHoverProvider extends BaseProvider {
     }
 
     @Override
-    public BaseComponent[] getValue(Player player, String message) {
-        BaseComponent result = this.format.performFormat(player, message);
+    public BaseComponent[] getValue(SpAChat plugin, Player player, String message) {
+        BaseComponent result = this.format.performFormat(plugin, player, message);
         BaseComponent[] eventValue = new BaseComponent[this.valueFormat.length];
         for (int i = 0; i < this.valueFormat.length; i++) {
-            eventValue[i] = this.valueFormat[i].performFormat(player, message);
+            eventValue[i] = this.valueFormat[i].performFormat(plugin, player, message);
             if (i < this.valueFormat.length - 1) {
                 eventValue[i].addExtra("\n");
             }
@@ -51,9 +52,6 @@ public class WithHoverProvider extends BaseProvider {
             throw new IllegalArgumentException("withHover action must be either SHOW_TEXT, SHOW_ACHIEVEMENT, or SHOW_ITEM");
         }
         this.action = HoverEvent.Action.valueOf(action);
-        if (this.action == null) {
-            throw new IllegalArgumentException("withHover action must be either SHOW_TEXT, SHOW_ACHIEVEMENT, or SHOW_ITEM");
-        }
         List<?> list = section.getList("value-format");
         if (list.size() <= 0) {
             throw new IllegalArgumentException("value-format needs to have at least one thing in it");

@@ -23,7 +23,7 @@ public class TagManager {
         this.plugin = plugin;
     }
 
-    public boolean load(@Nonnull ConfigurationSection section) {
+    public void load(@Nonnull ConfigurationSection section) {
         this.plugin.craftIRCFix = section.getBoolean("craftIRC-fix", false);
 
         try {
@@ -75,8 +75,6 @@ public class TagManager {
                 }
             }
         }
-
-        return false;
     }
 
     public void release() {

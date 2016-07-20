@@ -25,11 +25,6 @@ public class NameProvider extends BaseProvider {
     }
 
     @Override
-    public void parseFromConfig(ConfigurationSection section) {
-        super.parseFromConfig(section);
-    }
-
-    @Override
     public String getDebugHierarchy(String prefix) {
         return prefix + "minecraft:name";
     }

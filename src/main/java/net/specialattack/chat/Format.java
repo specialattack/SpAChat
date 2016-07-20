@@ -11,11 +11,13 @@ import net.specialattack.chat.provider.minecraft.NameProvider;
 import net.specialattack.chat.provider.minecraft.RealNameProvider;
 import net.specialattack.chat.provider.minecraft.UUIDProvider;
 import net.specialattack.chat.provider.spachat.ColoredNameProvider;
+import net.specialattack.chat.provider.spachat.HealthBarProvider;
 import net.specialattack.chat.provider.spachat.MetaProvider;
 import net.specialattack.chat.provider.spachat.StringProvider;
 import net.specialattack.chat.provider.spachat.TagsProvider;
 import net.specialattack.chat.provider.spachat.WithClickProvider;
 import net.specialattack.chat.provider.spachat.WithHoverProvider;
+import net.specialattack.chat.provider.spachat.WorldProvider;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
@@ -94,5 +96,7 @@ public class Format {
         Format.registerProvider(MetaProvider.class);
         Format.registerProvider(WithClickProvider.class);
         Format.registerProvider(WithHoverProvider.class);
+        Format.registerProvider(HealthBarProvider.class);
+        Format.registerProvider(WorldProvider.class);
     }
 }

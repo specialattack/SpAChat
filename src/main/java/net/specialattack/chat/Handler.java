@@ -1,7 +1,7 @@
 package net.specialattack.chat;
 
 import net.md_5.bungee.api.chat.BaseComponent;
-import net.specialattack.spacore.event.PlayerPermissionsChanged;
+import net.specialattack.spacore.event.PlayerPermissionsChangedEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -21,7 +21,7 @@ public class Handler implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerPermissionsChanged(PlayerPermissionsChanged event) {
+    public void onPlayerPermissionsChanged(PlayerPermissionsChangedEvent event) {
         this.plugin.updatePlayerNickname(event.getPlayer());
     }
 

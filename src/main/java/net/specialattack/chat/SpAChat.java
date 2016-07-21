@@ -62,12 +62,14 @@ public class SpAChat extends JavaPlugin {
     }
 
     public void loadConfig() {
-        this.unloadPermissions();
+        this.log("Loading configuration");
 
-        this.tagManager = new TagManager(this);
+        this.unloadPermissions();
+        this.reloadConfig();
 
         FileConfiguration config = this.getConfig();
 
+        this.tagManager = new TagManager(this);
         this.tagManager.load(config);
     }
 

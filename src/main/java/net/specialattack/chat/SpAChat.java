@@ -28,6 +28,13 @@ public class SpAChat extends JavaPlugin {
     public boolean craftIRCFix;
 
     @Override
+    public void onDisable() {
+        this.unloadPermissions();
+
+        this.log(this.pdf.getFullName() + " is now disabled!");
+    }
+
+    @Override
     public void onEnable() {
         this.log = this.getLogger();
         this.pdf = this.getDescription();
@@ -45,13 +52,6 @@ public class SpAChat extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new Handler(this), this);
 
         this.log(this.pdf.getFullName() + " is now enabled!");
-    }
-
-    @Override
-    public void onDisable() {
-        this.unloadPermissions();
-
-        this.log(this.pdf.getFullName() + " is now disabled!");
     }
 
     private void unloadPermissions() {

@@ -49,9 +49,6 @@ public class NickSubCommand extends AbstractSubCommand {
             nickname = Util.colorize(nickname);
             this.plugin.nicknames.put(player.getUniqueId(), nickname);
             sender.sendMessage(ChatFormat.format("Nickname set to %s", ChatColor.GREEN, nickname));
-            if (!sender.hasPermission(Consts.PERM_CUSTOM_NICK)) {
-                sender.sendMessage(ChatColor.RED + "Note: you do not have permission to display this nickname");
-            }
         }
         if (player instanceof Player) {
             this.plugin.updatePlayerNickname((Player) player);

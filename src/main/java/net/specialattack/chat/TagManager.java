@@ -28,7 +28,6 @@ public class TagManager {
 
         try {
             this.format = Format.loadFormat(MapListSection.convert(section.getMapList("format")));
-            this.plugin.log(Level.INFO, "Chat format is:" + this.format.getDebugHierarchy());
         } catch (Exception e) {
             this.plugin.log(Level.SEVERE, "Failed loading chat formatting", e);
         }

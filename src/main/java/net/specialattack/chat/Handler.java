@@ -52,7 +52,7 @@ public class Handler implements Listener {
         UUID uuid = event.getPlayer().getUniqueId();
         String message = event.getMessage();
         if (this.playerMessages.containsKey(uuid)) {
-            message = this.playerMessages.get(uuid) + " " + message;
+            message = this.playerMessages.get(uuid) + message;
             event.setMessage(message);
         }
         if (event.getMessage().endsWith("\\")) {
